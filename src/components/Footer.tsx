@@ -81,15 +81,6 @@ export const Footer: React.FC = () => {
                   </button>
                 </li>
               ))}
-              <li className="pt-2">
-                <button
-                  onClick={() => navigateTo('admin')}
-                  className="text-slate-500 hover:text-red-400 transition-colors cursor-pointer text-left inline-flex items-center gap-1.5 font-semibold"
-                >
-                  <Lock className="w-3 h-3 text-slate-500" />
-                  <span>Kelola Tim Sales & Referral</span>
-                </button>
-              </li>
             </ul>
           </div>
 
@@ -149,12 +140,6 @@ export const Footer: React.FC = () => {
           </p>
           <div className="flex items-center gap-4 text-[11px]">
             <span>Halaman Sales Representative Mandiri Resmi.</span>
-            <button
-              onClick={() => navigateTo('admin')}
-              className="text-slate-500 hover:text-slate-400 cursor-pointer font-medium underline underline-offset-2"
-            >
-              Portal Admin
-            </button>
           </div>
         </div>
 

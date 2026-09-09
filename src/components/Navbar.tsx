@@ -191,13 +191,6 @@ export const Navbar: React.FC = () => {
                 <MessageCircle className="w-4 h-4 fill-white" />
                 <span>Chat Sales ({activeSales.name})</span>
               </a>
-
-              <button
-                onClick={() => handleNavClick('admin')}
-                className="w-full py-2 text-center text-xs text-slate-400 hover:text-slate-700 font-medium"
-              >
-                Kelola Tim Sales (Admin)
-              </button>
             </div>
           </div>
         )}

@@ -89,7 +89,7 @@ export const AdminSalesPage: React.FC = () => {
       setPinError('');
       setPinInput('');
     } else {
-      setPinError('PIN salah. Silakan coba lagi (PIN bawaan: 1234)');
+      setPinError('PIN keamanan salah. Silakan coba lagi.');
     }
   };
 
@@ -266,7 +266,7 @@ export const AdminSalesPage: React.FC = () => {
                   setPinInput(e.target.value);
                   setPinError('');
                 }}
-                placeholder="Masukkan PIN (Default: 1234)"
+                placeholder="••••••••"
                 autoFocus
                 className="w-full px-4 py-3.5 rounded-xl border border-slate-300 text-center font-black text-xl tracking-widest focus:outline-none focus:ring-2 focus:ring-[#E0040B] focus:border-transparent transition-all"
               />
@@ -285,7 +285,7 @@ export const AdminSalesPage: React.FC = () => {
               Buka Panel Sales
             </button>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-center text-xs text-slate-400">
               <button
                 type="button"
                 onClick={() => navigateTo('home')}
@@ -294,7 +294,6 @@ export const AdminSalesPage: React.FC = () => {
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Kembali ke Website</span>
               </button>
-              <span className="text-[11px] text-slate-400 font-mono">PIN Bawaan: 1234</span>
             </div>
           </form>
         </div>
