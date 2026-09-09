@@ -156,7 +156,7 @@ export const SalesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       }
 
-      // Priority C: Hash (e.g. #/budi or #budi)
+      // Priority C: Hash (e.g. #/budi or #budi) - auto-clean to clean path /budi
       const hashRaw = window.location.hash.replace(/^#\/?/, '').split('?')[0].split('/')[0];
       if (hashRaw && !RESERVED_SLUGS.has(hashRaw)) {
         const found = getSalesBySlug(hashRaw);
@@ -165,6 +165,8 @@ export const SalesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setIsCustomSalesActive(true);
           try {
             sessionStorage.setItem(ACTIVE_SALES_SESSION_KEY, found.slug);
+            // Clean URL from hashtag
+            window.history.replaceState(null, '', `/${found.slug}`);
           } catch {}
           return;
         }

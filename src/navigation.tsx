@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 export type PageId =
   | 'home'
@@ -9,6 +9,19 @@ export type PageId =
   | 'testimoni'
   | 'faq'
   | 'admin';
+
+const KNOWN_PAGE_PATHS: Record<string, PageId> = {
+  'admin': 'admin',
+  'kelola-sales': 'admin',
+  'paket': 'paket',
+  'paket-internet': 'paket',
+  'cek-area': 'cek-area',
+  'coverage': 'cek-area',
+  'keunggulan': 'keunggulan',
+  'cara-pasang': 'cara-pasang',
+  'testimoni': 'testimoni',
+  'faq': 'faq',
+};
 
 interface NavigationContextType {
   currentPage: PageId;
@@ -22,31 +35,27 @@ const NavigationContext = createContext<NavigationContextType>({
 
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const getPageFromUrl = (): PageId => {
-    // 1. Check pathname first
-    const pathname = window.location.pathname.replace(/^\/+|\/+$/g, '');
-    if (pathname === 'admin' || pathname === 'kelola-sales') {
-      return 'admin';
+    // 1. If legacy hash exists (e.g. /#/admin or /#/budi), migrate to clean slash path
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const hashRaw = window.location.hash.replace(/^#\/?/, '').split('?')[0];
+      if (hashRaw) {
+        const cleanPath = `/${hashRaw}`;
+        try {
+          window.history.replaceState(null, '', cleanPath);
+        } catch {}
+      }
     }
 
-    // 2. Check hash
-    const hash = window.location.hash.replace('#/', '').replace('#', '').split('?')[0];
-    if (hash === 'admin' || hash === 'kelola-sales') {
-      return 'admin';
+    // 2. Read clean pathname (e.g. /admin, /paket, /budi, or /)
+    const pathname = typeof window !== 'undefined'
+      ? window.location.pathname.replace(/^\/+|\/+$/g, '')
+      : '';
+
+    if (pathname && KNOWN_PAGE_PATHS[pathname]) {
+      return KNOWN_PAGE_PATHS[pathname];
     }
-    if (hash === 'paket' || hash === 'paket-internet') {
-      return 'paket';
-    }
-    if (hash === 'cek-area' || hash === 'coverage') {
-      return 'cek-area';
-    }
-    if (
-      hash === 'keunggulan' ||
-      hash === 'cara-pasang' ||
-      hash === 'testimoni' ||
-      hash === 'faq'
-    ) {
-      return hash as PageId;
-    }
+
+    // Default to 'home' (also applies to sales slugs like /budi, /rian)
     return 'home';
   };
 
@@ -56,35 +65,52 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const handleUrlChange = () => {
       const page = getPageFromUrl();
       setCurrentPage(page);
-      window.scrollTo({ top: 0, behavior: 'instant' });
     };
 
-    window.addEventListener('hashchange', handleUrlChange);
     window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
     return () => {
-      window.removeEventListener('hashchange', handleUrlChange);
       window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
     };
   }, []);
 
-  const navigateTo = (page: PageId, anchorId?: string) => {
+  const navigateTo = useCallback((page: PageId, anchorId?: string) => {
+    let targetPath = '/';
+
     if (page === 'home') {
-      window.location.hash = anchorId ? `#/${anchorId}` : '#/';
-      setCurrentPage('home');
-      if (anchorId) {
-        setTimeout(() => {
-          const el = document.getElementById(anchorId);
-          el?.scrollIntoView({ behavior: 'smooth' });
-        }, 80);
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      // Check if there is an active sales slug in session to preserve it
+      let preservedSlug = '';
+      try {
+        const stored = sessionStorage.getItem('indihome_active_sales_slug');
+        if (stored && !KNOWN_PAGE_PATHS[stored]) {
+          preservedSlug = stored;
+        }
+      } catch {}
+
+      targetPath = preservedSlug ? `/${preservedSlug}` : '/';
     } else {
-      window.location.hash = `#/${page}`;
-      setCurrentPage(page);
+      targetPath = `/${page}`;
+    }
+
+    // Update browser URL cleanly without '#' hashtag
+    if (typeof window !== 'undefined' && window.location.pathname !== targetPath) {
+      try {
+        window.history.pushState(null, '', targetPath);
+      } catch {}
+    }
+
+    setCurrentPage(page);
+
+    if (anchorId) {
+      setTimeout(() => {
+        const el = document.getElementById(anchorId);
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }, 80);
+    } else {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
-  };
+  }, []);
 
   return (
     <NavigationContext.Provider value={{ currentPage, navigateTo }}>
@@ -94,3 +120,4 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 };
 
 export const useAppNavigation = () => useContext(NavigationContext);
+

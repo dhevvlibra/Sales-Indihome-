@@ -43,6 +43,7 @@ export const AdminSalesPage: React.FC = () => {
     formatShareUrl,
     formatSalesShareMessage,
     resetToDefaults,
+    setActiveSalesBySlug,
   } = useSales();
 
   // PIN Authentication State
@@ -674,16 +675,31 @@ export const AdminSalesPage: React.FC = () => {
                     </button>
 
                     {/* Preview Website for this sales */}
+                    <button
+                      onClick={() => {
+                        setActiveSalesBySlug(agent.slug);
+                        if (typeof window !== 'undefined') {
+                          try {
+                            window.history.pushState(null, '', `/${agent.slug}`);
+                          } catch {}
+                        }
+                        navigateTo('home');
+                      }}
+                      className="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                      title="Lihat langsung tampilan website versi sales ini"
+                    >
+                      <Eye className="w-3.5 h-3.5 text-slate-600" />
+                      <span>Tes Buka</span>
+                    </button>
+
                     <a
                       href={`/${agent.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 inline-flex items-center gap-1.5 transition-colors"
-                      title="Lihat Tampilan Website Versi Sales Ini"
+                      className="p-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 inline-flex items-center justify-center transition-colors"
+                      title={`Buka /${agent.slug} di tab baru`}
                     >
-                      <Eye className="w-3.5 h-3.5 text-slate-600" />
-                      <span>Tes Buka</span>
-                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
                     </a>
 
                     {/* Share Text Template */}
