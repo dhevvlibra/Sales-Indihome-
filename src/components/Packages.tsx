@@ -16,6 +16,7 @@ import {
   Info,
   Layers,
   ArrowRight,
+  ChevronDown,
 } from 'lucide-react';
 import { PACKAGES_DATA, TELKOMSEL_ONE_TIERS } from '../data/packages';
 import { getWhatsAppUrl } from '../config/whatsapp';
@@ -31,6 +32,16 @@ export const Packages: React.FC = () => {
   // Interactive state for Telkomsel One Kuota: '30 GB' vs '50 GB'
   // Default to '50 GB' because it's the standout promo (only +10k for +20GB!)
   const [selectedKuotaTOne, setSelectedKuotaTOne] = useState<'30 GB' | '50 GB'>('50 GB');
+
+  // Accordion state to collapse/expand benefits dropdown for each package card
+  const [expandedBenefits, setExpandedBenefits] = useState<Record<string, boolean>>({});
+
+  const toggleBenefit = (id: string) => {
+    setExpandedBenefits((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const streamingPackages = PACKAGES_DATA.filter((p) => p.category === 'internet-streaming');
   const gamingPackage = PACKAGES_DATA.find((p) => p.category === 'gaming');
@@ -74,6 +85,8 @@ export const Packages: React.FC = () => {
   // Render a standard package card (Internet Streaming, Gaming, Movie)
   const renderStandardCard = (pkg: PackageItem) => {
     const isBestSeller = pkg.isBestSeller;
+    const isBenefitExpanded = !!expandedBenefits[pkg.id];
+    const benefitCount = (pkg.includedApps?.length || 0) + (pkg.perks?.length || 0);
     const waUrl = getWhatsAppUrl({
       intent: 'package',
       packageName: pkg.name,
@@ -176,49 +189,97 @@ export const Packages: React.FC = () => {
             </div>
           </div>
 
-          {/* Included Apps with Authentic Brand Logos */}
-          {pkg.includedApps && pkg.includedApps.length > 0 && (
-            <div className="mb-5">
-              <div className="flex items-center justify-between gap-1 mb-2">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  {pkg.category === 'gaming'
-                    ? 'Benefit Game Termasuk:'
-                    : pkg.category === 'movie'
-                    ? 'Aplikasi Movie Termasuk:'
-                    : 'Layanan Streaming Termasuk:'}
-                </p>
+          {/* Toggle Benefit Dropdown Button */}
+          <div className="mb-4">
+            <button
+              type="button"
+              id={`btn-toggle-benefit-${pkg.id}`}
+              onClick={() => toggleBenefit(pkg.id)}
+              className={`w-full py-2.5 px-3.5 rounded-xl text-xs font-bold flex items-center justify-between transition-all cursor-pointer border ${
+                isBenefitExpanded
+                  ? 'bg-red-50 text-[#E0040B] border-red-200 shadow-2xs'
+                  : 'bg-slate-50 hover:bg-slate-100/90 text-slate-700 border-slate-200 hover:border-slate-300'
+              }`}
+              aria-expanded={isBenefitExpanded}
+            >
+              <div className="flex items-center gap-2">
+                <Sparkles className={`w-3.5 h-3.5 ${isBenefitExpanded ? 'text-[#E0040B]' : 'text-amber-500'}`} />
+                <span>{isBenefitExpanded ? 'Sembunyikan Benefit' : 'Lihat Benefit'}</span>
               </div>
+              <div className="flex items-center gap-1.5">
+                <span
+                  className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                    isBenefitExpanded ? 'bg-red-100 text-[#E0040B]' : 'bg-slate-200/80 text-slate-600'
+                  }`}
+                >
+                  {benefitCount} Benefit
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    isBenefitExpanded ? 'rotate-180 text-[#E0040B]' : 'text-slate-400'
+                  }`}
+                />
+              </div>
+            </button>
 
-              {pkg.category === 'gaming' ? (
-                <div className="flex flex-wrap gap-1.5">
-                  {pkg.includedApps.map((app, i) => (
-                    <span
-                      key={i}
-                      className="text-[10px] font-bold px-2.5 py-1 rounded-lg border bg-purple-50 text-purple-700 border-purple-200"
-                    >
-                      {app}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <StreamingLogosList apps={pkg.includedApps} size="sm" />
+            {/* Dropdown Content with Animation */}
+            <AnimatePresence initial={false}>
+              {isBenefitExpanded && (
+                <motion.div
+                  id={`benefit-dropdown-${pkg.id}`}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25, ease: [0.04, 0.62, 0.23, 0.98] }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-2 pb-2 space-y-4 border-t border-slate-100 mt-2">
+                    {/* Included Apps with Authentic Brand Logos */}
+                    {pkg.includedApps && pkg.includedApps.length > 0 && (
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+                          {pkg.category === 'gaming'
+                            ? 'Benefit Game Termasuk:'
+                            : pkg.category === 'movie'
+                            ? 'Aplikasi Movie Termasuk:'
+                            : 'Layanan Streaming Termasuk:'}
+                        </p>
+
+                        {pkg.category === 'gaming' ? (
+                          <div className="flex flex-wrap gap-1.5">
+                            {pkg.includedApps.map((app, i) => (
+                              <span
+                                key={i}
+                                className="text-[10px] font-bold px-2.5 py-1 rounded-lg border bg-purple-50 text-purple-700 border-purple-200"
+                              >
+                                {app}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <StreamingLogosList apps={pkg.includedApps} size="sm" />
+                        )}
+                      </div>
+                    )}
+
+                    {/* Perks */}
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        Fasilitas Paket:
+                      </p>
+                      {pkg.perks.map((perk, idx) => (
+                        <div key={idx} className="flex items-start gap-2 text-xs text-slate-700">
+                          <div className="mt-0.5 w-3.5 h-3.5 rounded-full bg-red-50 text-[#E0040B] flex items-center justify-center shrink-0">
+                            <Check className="w-2.5 h-2.5 stroke-[3]" />
+                          </div>
+                          <span className="leading-snug">{perk}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
               )}
-            </div>
-          )}
-
-          {/* Perks */}
-          <div className="space-y-2 mb-6">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Fasilitas Paket:
-            </p>
-            {pkg.perks.map((perk, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-xs text-slate-700">
-                <div className="mt-0.5 w-3.5 h-3.5 rounded-full bg-red-50 text-[#E0040B] flex items-center justify-center shrink-0">
-                  <Check className="w-2.5 h-2.5 stroke-[3]" />
-                </div>
-                <span className="leading-snug">{perk}</span>
-              </div>
-            ))}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -257,6 +318,8 @@ export const Packages: React.FC = () => {
   const renderTelkomselOneCard = (tier: TelkomselOneTier) => {
     const currentOption = tier.options[selectedKuotaTOne];
     const is50Gb = selectedKuotaTOne === '50 GB';
+    const isBenefitExpanded = !!expandedBenefits[tier.id];
+    const benefitCount = (tier.includedApps?.length || 0) + (tier.perks?.length || 0) + 1;
 
     const waUrl = getWhatsAppUrl({
       intent: 'package',
@@ -384,39 +447,87 @@ export const Packages: React.FC = () => {
             </div>
           </div>
 
-          {/* Included Apps with Authentic Brand Logos */}
-          <div className="mb-5">
-            <div className="flex items-center justify-between gap-1 mb-2">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                Layanan Streaming Termasuk:
-              </p>
-            </div>
-            <StreamingLogosList apps={tier.includedApps} size="sm" />
-          </div>
+          {/* Toggle Benefit Dropdown Button */}
+          <div className="mb-4">
+            <button
+              type="button"
+              id={`btn-toggle-benefit-${tier.id}`}
+              onClick={() => toggleBenefit(tier.id)}
+              className={`w-full py-2.5 px-3.5 rounded-xl text-xs font-bold flex items-center justify-between transition-all cursor-pointer border ${
+                isBenefitExpanded
+                  ? 'bg-red-50 text-[#E0040B] border-red-200 shadow-2xs'
+                  : 'bg-slate-50 hover:bg-slate-100/90 text-slate-700 border-slate-200 hover:border-slate-300'
+              }`}
+              aria-expanded={isBenefitExpanded}
+            >
+              <div className="flex items-center gap-2">
+                <Sparkles className={`w-3.5 h-3.5 ${isBenefitExpanded ? 'text-[#E0040B]' : 'text-amber-500'}`} />
+                <span>{isBenefitExpanded ? 'Sembunyikan Benefit' : 'Lihat Benefit'}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span
+                  className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                    isBenefitExpanded ? 'bg-red-100 text-[#E0040B]' : 'bg-slate-200/80 text-slate-600'
+                  }`}
+                >
+                  {benefitCount} Benefit
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    isBenefitExpanded ? 'rotate-180 text-[#E0040B]' : 'text-slate-400'
+                  }`}
+                />
+              </div>
+            </button>
 
-          {/* Perks */}
-          <div className="space-y-2 mb-6">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Fasilitas Paket Telkomsel One:
-            </p>
-            {tier.perks.map((perk, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-xs text-slate-700">
-                <div className="mt-0.5 w-3.5 h-3.5 rounded-full bg-red-50 text-[#E0040B] flex items-center justify-center shrink-0">
-                  <Check className="w-2.5 h-2.5 stroke-[3]" />
-                </div>
-                <span className="leading-snug">{perk}</span>
-              </div>
-            ))}
-            <div className="flex items-start gap-2 text-xs text-slate-700">
-              <div className="mt-0.5 w-3.5 h-3.5 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 font-bold">
-                ✓
-              </div>
-              <span className="leading-snug font-medium text-amber-900">
-                {is50Gb
-                  ? 'Kuota Bersama Keluarga 50 GB/bulan (Paket paling untung, beda 10rb)'
-                  : 'Kuota Bersama Keluarga 30 GB/bulan untuk nomor Telkomsel'}
-              </span>
-            </div>
+            {/* Dropdown Content with Animation */}
+            <AnimatePresence initial={false}>
+              {isBenefitExpanded && (
+                <motion.div
+                  id={`benefit-dropdown-${tier.id}`}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25, ease: [0.04, 0.62, 0.23, 0.98] }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-2 pb-2 space-y-4 border-t border-slate-100 mt-2">
+                    {/* Included Apps with Authentic Brand Logos */}
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+                        Layanan Streaming Termasuk:
+                      </p>
+                      <StreamingLogosList apps={tier.includedApps} size="sm" />
+                    </div>
+
+                    {/* Perks */}
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        Fasilitas Paket Telkomsel One:
+                      </p>
+                      {tier.perks.map((perk, idx) => (
+                        <div key={idx} className="flex items-start gap-2 text-xs text-slate-700">
+                          <div className="mt-0.5 w-3.5 h-3.5 rounded-full bg-red-50 text-[#E0040B] flex items-center justify-center shrink-0">
+                            <Check className="w-2.5 h-2.5 stroke-[3]" />
+                          </div>
+                          <span className="leading-snug">{perk}</span>
+                        </div>
+                      ))}
+                      <div className="flex items-start gap-2 text-xs text-slate-700">
+                        <div className="mt-0.5 w-3.5 h-3.5 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 font-bold">
+                          ✓
+                        </div>
+                        <span className="leading-snug font-medium text-amber-900">
+                          {is50Gb
+                            ? 'Kuota Bersama Keluarga 50 GB/bulan (Paket paling untung, beda 10rb)'
+                            : 'Kuota Bersama Keluarga 30 GB/bulan untuk nomor Telkomsel'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
