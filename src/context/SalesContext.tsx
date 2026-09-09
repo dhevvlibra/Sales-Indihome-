@@ -142,33 +142,43 @@ export const SalesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       }
 
-      // Priority B: Pathname (e.g. /budi or /rian)
+      // Priority B: Pathname (e.g. /budi or /rian, including subfolder deployments)
       const pathname = window.location.pathname.replace(/^\/+|\/+$/g, '');
-      if (pathname && !RESERVED_SLUGS.has(pathname)) {
-        const found = getSalesBySlug(pathname);
-        if (found) {
-          setActiveSales(found);
-          setIsCustomSalesActive(true);
-          try {
-            sessionStorage.setItem(ACTIVE_SALES_SESSION_KEY, found.slug);
-          } catch {}
-          return;
+      if (pathname) {
+        const pathSegments = pathname.split('/').filter(Boolean);
+        for (let i = pathSegments.length - 1; i >= 0; i--) {
+          const seg = pathSegments[i];
+          if (!RESERVED_SLUGS.has(seg)) {
+            const found = getSalesBySlug(seg);
+            if (found) {
+              setActiveSales(found);
+              setIsCustomSalesActive(true);
+              try {
+                sessionStorage.setItem(ACTIVE_SALES_SESSION_KEY, found.slug);
+              } catch {}
+              return;
+            }
+          }
         }
       }
 
-      // Priority C: Hash (e.g. #/budi or #budi) - auto-clean to clean path /budi
-      const hashRaw = window.location.hash.replace(/^#\/?/, '').split('?')[0].split('/')[0];
-      if (hashRaw && !RESERVED_SLUGS.has(hashRaw)) {
-        const found = getSalesBySlug(hashRaw);
-        if (found) {
-          setActiveSales(found);
-          setIsCustomSalesActive(true);
-          try {
-            sessionStorage.setItem(ACTIVE_SALES_SESSION_KEY, found.slug);
-            // Clean URL from hashtag
-            window.history.replaceState(null, '', `/${found.slug}`);
-          } catch {}
-          return;
+      // Priority C: Hash (e.g. #/budi or /#/budi) - auto-clean to clean path /budi
+      const hashRaw = window.location.hash.replace(/^#\/?/, '').split('?')[0].trim();
+      if (hashRaw) {
+        const hashSegments = hashRaw.split('/').filter(Boolean);
+        const hashTarget = hashSegments[hashSegments.length - 1];
+        if (hashTarget && !RESERVED_SLUGS.has(hashTarget)) {
+          const found = getSalesBySlug(hashTarget);
+          if (found) {
+            setActiveSales(found);
+            setIsCustomSalesActive(true);
+            try {
+              sessionStorage.setItem(ACTIVE_SALES_SESSION_KEY, found.slug);
+              // Clean URL from hashtag
+              window.history.replaceState(null, '', `/${found.slug}`);
+            } catch {}
+            return;
+          }
         }
       }
 

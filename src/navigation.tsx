@@ -35,24 +35,35 @@ const NavigationContext = createContext<NavigationContextType>({
 
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const getPageFromUrl = (): PageId => {
-    // 1. If legacy hash exists (e.g. /#/admin or /#/budi), migrate to clean slash path
-    if (typeof window !== 'undefined' && window.location.hash) {
-      const hashRaw = window.location.hash.replace(/^#\/?/, '').split('?')[0];
-      if (hashRaw) {
-        const cleanPath = `/${hashRaw}`;
+    if (typeof window === 'undefined') return 'home';
+
+    // 1. Check Hash first (supports /#/admin, #/admin, #admin, etc.)
+    const hash = window.location.hash || '';
+    const cleanHash = hash.replace(/^#\/?/, '').split('?')[0].trim();
+    if (cleanHash) {
+      const hashSegments = cleanHash.split('/').filter(Boolean);
+      const hashTarget = hashSegments[hashSegments.length - 1];
+      if (hashTarget && KNOWN_PAGE_PATHS[hashTarget]) {
+        // Attempt clean-up to slash path in browser address bar
         try {
-          window.history.replaceState(null, '', cleanPath);
+          window.history.replaceState(null, '', `/${hashTarget}`);
         } catch {}
+        return KNOWN_PAGE_PATHS[hashTarget];
       }
     }
 
-    // 2. Read clean pathname (e.g. /admin, /paket, /budi, or /)
-    const pathname = typeof window !== 'undefined'
-      ? window.location.pathname.replace(/^\/+|\/+$/g, '')
-      : '';
-
-    if (pathname && KNOWN_PAGE_PATHS[pathname]) {
-      return KNOWN_PAGE_PATHS[pathname];
+    // 2. Check Pathname (supports /admin, /paket, and subdirectories like /my-app/admin)
+    const pathname = window.location.pathname || '';
+    const cleanPath = pathname.replace(/^\/+|\/+$/g, '').split('?')[0].trim();
+    if (cleanPath) {
+      const pathSegments = cleanPath.split('/').filter(Boolean);
+      // Check from deepest segment to root
+      for (let i = pathSegments.length - 1; i >= 0; i--) {
+        const segment = pathSegments[i];
+        if (KNOWN_PAGE_PATHS[segment]) {
+          return KNOWN_PAGE_PATHS[segment];
+        }
+      }
     }
 
     // Default to 'home' (also applies to sales slugs like /budi, /rian)
