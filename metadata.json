@@ -1,0 +1,6 @@
+{
+  "name": "Layanan WiFi IndiHome by Telkomsel",
+  "description": "Layanan Pemasangan Resmi WiFi IndiHome by Telkomsel Area Bandung, Cimahi, Cianjur & Padalarang. Pasang Internet Cepat & Tanpa Ribet.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

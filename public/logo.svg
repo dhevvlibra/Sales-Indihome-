@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 510" width="100%" height="100%" fill="none">
+  <!-- 1. White Antenna Pole -->
+  <rect x="131" y="105" width="18" height="100" fill="white" />
+
+  <!-- 2. Antenna Top Circle with WiFi Radio Waves -->
+  <circle cx="140" cy="85" r="58" fill="#E0040B" />
+  <!-- WiFi Center Dot -->
+  <circle cx="140" cy="85" r="9" fill="white" />
+  <!-- Left Waves -->
+  <path
+    d="M 124 71 A 20 20 0 0 0 124 99"
+    stroke="white"
+    stroke-width="6"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <path
+    d="M 112 59 A 36 36 0 0 0 112 111"
+    stroke="white"
+    stroke-width="6"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <!-- Right Waves -->
+  <path
+    d="M 156 71 A 20 20 0 0 1 156 99"
+    stroke="white"
+    stroke-width="6"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <path
+    d="M 168 59 A 36 36 0 0 1 168 111"
+    stroke="white"
+    stroke-width="6"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <!-- 3. Main Red House Silhouette -->
+  <path
+    d="M 244 67
+       C 248 63, 252 63, 256 67
+       L 466 215
+       C 475 221, 477 232, 471 240
+       C 465 248, 453 250, 445 244
+       L 421 227
+       L 421 445
+       C 421 465, 405 480, 385 480
+       L 115 480
+       C 95 480, 79 465, 79 445
+       L 79 227
+       L 55 244
+       C 47 250, 35 248, 29 240
+       C 23 232, 25 221, 34 215
+       Z"
+    fill="#E0040B"
+  />
+
+  <!-- 4. White Roof Chevron Line -->
+  <path
+    d="M 98 232 L 250 134 L 402 232"
+    stroke="white"
+    stroke-width="18"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- 5. Big White Circle / Ring 'O' inside the House -->
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M 250 205
+       A 135 135 0 1 1 249.9 205
+       Z
+       M 250 268
+       A 72 72 0 1 0 250.1 268
+       Z"
+    fill="white"
+  />
+</svg>
