@@ -17,6 +17,7 @@ import { IndiHomeLogo } from './IndiHomeLogo';
 import { useOrderModal } from '../context/OrderContext';
 import { useSales } from '../context/SalesContext';
 import { getWhatsAppUrl } from '../config/whatsapp';
+import { StreamingLogosList } from './StreamingLogos';
 
 interface FormState {
   fullName: string;
@@ -230,22 +231,45 @@ export const OrderModal: React.FC = () => {
             </p>
 
             {/* Selected Package Summary Pill */}
-            <div className="mt-4 p-3 rounded-2xl bg-slate-800/90 border border-slate-700 flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block truncate">
-                  Paket Terpilih
-                </span>
-                <h4 className="text-sm font-black text-white truncate">
-                  {selectedPackage.packageName}
-                </h4>
-                <div className="text-xs text-slate-300 flex items-center gap-1.5 mt-0.5">
-                  <span className="font-semibold text-white">{selectedPackage.speed}</span>
+            <div className="mt-4 p-3 rounded-2xl bg-slate-800/90 border border-slate-700">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block truncate">
+                    Paket Terpilih
+                  </span>
+                  <h4 className="text-sm font-black text-white truncate">
+                    {selectedPackage.packageName}
+                  </h4>
+                  <div className="text-xs text-slate-300 flex items-center gap-1.5 mt-0.5">
+                    <span className="font-semibold text-white">{selectedPackage.speed}</span>
+                  </div>
+                </div>
+                <div className="text-right shrink-0 bg-red-600/20 border border-red-500/30 px-3 py-1.5 rounded-xl">
+                  <div className="text-[10px] text-red-300 font-bold">Biaya Langganan</div>
+                  <div className="text-sm font-black text-white">{selectedPackage.price}</div>
                 </div>
               </div>
-              <div className="text-right shrink-0 bg-red-600/20 border border-red-500/30 px-3 py-1.5 rounded-xl">
-                <div className="text-[10px] text-red-300 font-bold">Biaya Langganan</div>
-                <div className="text-sm font-black text-white">{selectedPackage.price}</div>
-              </div>
+
+              {/* Streaming apps indicator if package includes streaming */}
+              {(selectedPackage.packageName.toLowerCase().includes('streaming') ||
+                selectedPackage.packageName.toLowerCase().includes('telkomsel one') ||
+                selectedPackage.packageName.toLowerCase().includes('movie')) && (
+                <div className="mt-3 pt-2.5 border-t border-slate-700/80 flex items-center justify-between gap-2 flex-wrap">
+                  <span className="text-[10px] font-bold text-slate-300">
+                    Bonus Streaming Termasuk:
+                  </span>
+                  <StreamingLogosList
+                    apps={
+                      selectedPackage.packageName.toLowerCase().includes('movie')
+                        ? ['Netflix', 'Vidio', 'Vision+', 'Prime Video', 'Disney+ Hotstar']
+                        : selectedPackage.packageName.toLowerCase().includes('telkomsel one')
+                        ? ['MaxStream']
+                        : ['Vision+', 'Prime Video', 'Viu', 'MaxStream']
+                    }
+                    size="sm"
+                  />
+                </div>
+              )}
             </div>
           </div>
 

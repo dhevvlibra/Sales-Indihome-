@@ -21,12 +21,12 @@ import { PACKAGES_DATA, TELKOMSEL_ONE_TIERS } from '../data/packages';
 import { getWhatsAppUrl } from '../config/whatsapp';
 import { useOrderModal } from '../context/OrderContext';
 import { PackageCategory, PackageItem, TelkomselOneTier } from '../types';
+import { StreamingLogosList } from './StreamingLogos';
 
 export const Packages: React.FC = () => {
   const { openOrderModal } = useOrderModal();
-  // Default to 'internet-streaming' or 'all'. Let's default to 'internet-streaming' for immediate clarity, or 'all'.
-  // 'all' is standard, but let's make sure categories are crystal clear!
-  const [activeCategory, setActiveCategory] = useState<PackageCategory>('internet-streaming');
+  // Default to 'all' so "Semua Paket" on top is active by default, or user can filter by specific category
+  const [activeCategory, setActiveCategory] = useState<PackageCategory>('all');
   
   // Interactive state for Telkomsel One Kuota: '30 GB' vs '50 GB'
   // Default to '50 GB' because it's the standout promo (only +10k for +20GB!)
@@ -36,7 +36,7 @@ export const Packages: React.FC = () => {
   const gamingPackage = PACKAGES_DATA.find((p) => p.category === 'gaming');
   const moviePackage = PACKAGES_DATA.find((p) => p.category === 'movie');
 
-  const categoryTabs = [
+  const specificCategoryTabs = [
     {
       id: 'internet-streaming' as PackageCategory,
       title: 'Internet + Streaming',
@@ -68,14 +68,6 @@ export const Packages: React.FC = () => {
       icon: Film,
       badge: 'Bioskop Lengkap',
       badgeColor: 'bg-rose-50 text-rose-700 border-rose-200',
-    },
-    {
-      id: 'all' as PackageCategory,
-      title: 'Semua Paket',
-      subtitle: 'Bandingkan Seluruh Katalog',
-      icon: Layers,
-      badge: 'Lengkap',
-      badgeColor: 'bg-slate-100 text-slate-700 border-slate-200',
     },
   ];
 
@@ -184,28 +176,33 @@ export const Packages: React.FC = () => {
             </div>
           </div>
 
-          {/* Included Apps */}
+          {/* Included Apps with Authentic Brand Logos */}
           {pkg.includedApps && pkg.includedApps.length > 0 && (
             <div className="mb-5">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
-                {pkg.category === 'gaming' ? 'Benefit Game Termasuk:' : 'Aplikasi Hiburan Termasuk:'}
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {pkg.includedApps.map((app, i) => (
-                  <span
-                    key={i}
-                    className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border ${
-                      pkg.category === 'gaming'
-                        ? 'bg-purple-50 text-purple-700 border-purple-200'
-                        : pkg.category === 'movie'
-                        ? 'bg-rose-50 text-rose-700 border-rose-200'
-                        : 'bg-blue-50 text-blue-700 border-blue-200'
-                    }`}
-                  >
-                    {app}
-                  </span>
-                ))}
+              <div className="flex items-center justify-between gap-1 mb-2">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  {pkg.category === 'gaming'
+                    ? 'Benefit Game Termasuk:'
+                    : pkg.category === 'movie'
+                    ? 'Aplikasi Movie Termasuk:'
+                    : 'Layanan Streaming Termasuk:'}
+                </p>
               </div>
+
+              {pkg.category === 'gaming' ? (
+                <div className="flex flex-wrap gap-1.5">
+                  {pkg.includedApps.map((app, i) => (
+                    <span
+                      key={i}
+                      className="text-[10px] font-bold px-2.5 py-1 rounded-lg border bg-purple-50 text-purple-700 border-purple-200"
+                    >
+                      {app}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <StreamingLogosList apps={pkg.includedApps} size="sm" />
+              )}
             </div>
           )}
 
@@ -387,21 +384,14 @@ export const Packages: React.FC = () => {
             </div>
           </div>
 
-          {/* Included Apps */}
+          {/* Included Apps with Authentic Brand Logos */}
           <div className="mb-5">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
-              Streaming Termasuk:
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {tier.includedApps.map((app, i) => (
-                <span
-                  key={i}
-                  className="text-[10px] font-bold px-2.5 py-1 rounded-lg border bg-blue-50 text-blue-700 border-blue-200"
-                >
-                  {app}
-                </span>
-              ))}
+            <div className="flex items-center justify-between gap-1 mb-2">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                Layanan Streaming Termasuk:
+              </p>
             </div>
+            <StreamingLogosList apps={tier.includedApps} size="sm" />
           </div>
 
           {/* Perks */}
@@ -458,54 +448,103 @@ export const Packages: React.FC = () => {
   };
 
   return (
-    <section id="paket" className="py-14 md:py-20 bg-white relative">
+    <section id="paket" className="py-16 md:py-24 bg-white relative border-b border-slate-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 text-[#E0040B] rounded-full text-[10px] font-bold uppercase mb-3 border border-red-100">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-            </span>
-            Katalog Paket Resmi IndiHome by Telkomsel
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-red-50 text-[#E0040B] rounded-full text-xs font-semibold mb-3 border border-red-100">
+            <span className="w-2 h-2 rounded-full bg-[#E0040B]"></span>
+            <span>Katalog Paket Resmi IndiHome by Telkomsel</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight">
             Pilihan Paket Internet &amp; Hiburan
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-slate-500 leading-relaxed">
-            Klik kategori di bawah untuk memilih paket yang sesuai kebutuhan rumah Anda. Nikmati promo <strong className="text-slate-800 font-semibold">Upspeed Drastis</strong> tanpa biaya tersembunyi.
+          <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            Pilih paket yang sesuai kebutuhan rumah Anda. Dapatkan promo <strong className="text-slate-900 font-bold">Upspeed Drastis</strong>, sewa modem WiFi dual-band tanpa biaya tambahan, dan tagihan pasca-bayar.
           </p>
         </div>
 
-        {/* Category Navigation Bar (Clean & Highly Intuitive) */}
-        <div className="mb-10">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 max-w-5xl mx-auto">
-            {categoryTabs.map((tab, idx) => {
+        {/* Category Navigation Bar: "Semua Paket" di Atas, Baru Kategori Sisanya di Bawahnya */}
+        <div className="mb-10 max-w-5xl mx-auto space-y-2.5 sm:space-y-3">
+          {/* 1. Master Tab: Semua Paket (Di Atas Full-Width) */}
+          <button
+            type="button"
+            id="tab-category-all"
+            onClick={() => setActiveCategory('all')}
+            className={`w-full p-3.5 sm:p-4 rounded-2xl text-left border transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+              activeCategory === 'all'
+                ? 'bg-[#0F172A] border-[#0F172A] text-white shadow-lg shadow-slate-900/10 ring-2 ring-red-500/30'
+                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                  activeCategory === 'all' ? 'bg-white/10 text-white' : 'bg-white text-slate-700 shadow-2xs'
+                }`}
+              >
+                <Layers className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm sm:text-base font-black leading-tight">
+                    Semua Paket
+                  </span>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                      activeCategory === 'all'
+                        ? 'bg-red-500/20 text-red-300 border-red-500/30'
+                        : 'bg-red-50 text-[#E0040B] border-red-200'
+                    }`}
+                  >
+                    Katalog Lengkap
+                  </span>
+                </div>
+                <p className={`text-xs mt-0.5 ${activeCategory === 'all' ? 'text-slate-300' : 'text-slate-500'}`}>
+                  Bandingkan seluruh katalog resmi: WiFi Rumah, Streaming Hiburan, Telkomsel One, Game, &amp; Movie
+                </p>
+              </div>
+            </div>
+
+            <div className="hidden sm:flex items-center gap-1.5 text-xs font-bold shrink-0">
+              <span className={activeCategory === 'all' ? 'text-white' : 'text-slate-600'}>
+                Tampilkan Semua
+              </span>
+              <ArrowRight className={`w-3.5 h-3.5 ${activeCategory === 'all' ? 'text-red-400' : 'text-slate-400'}`} />
+            </div>
+          </button>
+
+          {/* 2. Sub Tabs: 4 Kategori Sisanya (Grid 2 Kolom di Mobile, 4 Kolom di Desktop) */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+            {specificCategoryTabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeCategory === tab.id;
-              const isLastOddOnMobile = idx === 4;
               return (
                 <button
                   key={tab.id}
+                  id={`tab-category-${tab.id}`}
+                  type="button"
                   onClick={() => setActiveCategory(tab.id)}
                   className={`p-3 sm:p-4 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                    isLastOddOnMobile ? 'col-span-2 sm:col-span-1' : ''
-                  } ${
                     isActive
                       ? 'bg-[#0F172A] border-[#0F172A] text-white shadow-md'
                       : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                      isActive ? 'bg-white/10 text-white' : 'bg-white text-slate-700 shadow-2xs'
-                    }`}>
+                    <div
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                        isActive ? 'bg-white/10 text-white' : 'bg-white text-slate-700 shadow-2xs'
+                      }`}
+                    >
                       <Icon className="w-4 h-4" />
                     </div>
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${
-                      isActive ? 'bg-white/20 text-white border-white/20' : tab.badgeColor
-                    }`}>
+                    <span
+                      className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${
+                        isActive ? 'bg-white/20 text-white border-white/20' : tab.badgeColor
+                      }`}
+                    >
                       {tab.badge}
                     </span>
                   </div>
@@ -592,12 +631,16 @@ export const Packages: React.FC = () => {
         {/* ------------------------------------------------------------- */}
         {activeCategory === 'internet-streaming' && (
           <div className="space-y-6 animate-in fade-in duration-300">
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-600 flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <Tv className="w-4 h-4 text-[#E0040B]" />
-                <span>
-                  Seluruh paket Internet + Streaming sudah termasuk langganan: <strong>Vision+, Prime Video, Viu, &amp; MaxStream</strong>
-                </span>
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-600 flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-2 font-semibold text-slate-900">
+                  <Tv className="w-4 h-4 text-[#E0040B]" />
+                  <span>Seluruh paket sudah termasuk 4 aplikasi streaming:</span>
+                </div>
+                <StreamingLogosList
+                  apps={['Vision+', 'Prime Video', 'Viu', 'MaxStream']}
+                  size="sm"
+                />
               </div>
               <span className="text-[11px] font-bold text-slate-500">
                 100% Full Fiber Optic Unlimited
@@ -632,12 +675,14 @@ export const Packages: React.FC = () => {
         {/* VIEW 4: MOVIE COMPLETE TAB                                    */}
         {/* ------------------------------------------------------------- */}
         {activeCategory === 'movie' && moviePackage && (
-          <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in duration-300">
-            <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 text-xs text-rose-900 flex items-center gap-3">
-              <Film className="w-5 h-5 text-rose-600 shrink-0" />
-              <div>
-                <strong className="font-bold">Bioskop Lengkap di Rumah:</strong> Sudah termasuk langganan resmi 5 platform besar sekaligus: Netflix, Disney+ Hotstar, Vidio, Prime Video, dan Vision+.
+          <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in duration-300">
+            <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 text-xs text-rose-900 flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-2">
+                <Film className="w-5 h-5 text-rose-600 shrink-0" />
+                <strong className="font-bold">Bioskop Lengkap di Rumah:</strong>
+                <span className="text-slate-700">Termasuk 5 platform besar:</span>
               </div>
+              <StreamingLogosList apps={moviePackage.includedApps} size="sm" />
             </div>
 
             <div>
@@ -654,9 +699,9 @@ export const Packages: React.FC = () => {
             
             {/* Sub-Section 1: Internet + Streaming */}
             <div>
-              <div className="flex items-center justify-between border-b border-slate-200 pb-3 mb-6">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-red-50 text-[#E0040B] flex items-center justify-center font-bold">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 mb-6 gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-red-50 text-[#E0040B] flex items-center justify-center font-bold shrink-0">
                     <Tv className="w-4 h-4" />
                   </div>
                   <div>
@@ -664,11 +709,16 @@ export const Packages: React.FC = () => {
                       1. Paket Internet + Streaming
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Internet fiber cepat + Bonus Vision+, Prime Video, Viu, MaxStream
+                      Internet fiber cepat + Bonus 4 platform streaming resmi
                     </p>
                   </div>
                 </div>
-                <span className="text-xs font-bold text-slate-400">3 Pilihan Kecepatan</span>
+                <div className="flex items-center gap-2">
+                  <StreamingLogosList
+                    apps={['Vision+', 'Prime Video', 'Viu', 'MaxStream']}
+                    size="sm"
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
                 {streamingPackages.map((pkg) => renderStandardCard(pkg))}
@@ -755,21 +805,11 @@ export const Packages: React.FC = () => {
         )}
 
         {/* Informative Footnote on Pricing & PPN */}
-        <div className="mt-14 p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-            <div className="text-xs sm:text-sm text-slate-600">
-              <strong className="font-semibold text-slate-800">Keterangan Resmi Tarif &amp; PPN:</strong> Seluruh harga di atas belum termasuk PPN 11%. Pembayaran tagihan resmi diterbitkan langsung oleh Telkomsel pada bulan berikutnya (pasca-bayar). Tidak ada pungutan uang tunai apapun di muka kepada sales maupun teknisi di lokasi.
-            </div>
+        <div className="mt-14 p-5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+          <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+          <div className="text-xs sm:text-sm text-slate-600">
+            <strong className="font-semibold text-slate-800">Keterangan Resmi Tarif &amp; PPN:</strong> Seluruh harga di atas belum termasuk PPN 11%. Pembayaran tagihan resmi diterbitkan langsung oleh Telkomsel pada bulan berikutnya (pasca-bayar). Tidak ada pungutan uang tunai apapun di muka kepada sales maupun teknisi di lokasi.
           </div>
-          <a
-            href={getWhatsAppUrl({ intent: 'consultation' })}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 text-xs font-bold text-[#E0040B] hover:text-[#b00006] underline underline-offset-4 cursor-pointer"
-          >
-            Konsultasi dengan Sales &rarr;
-          </a>
         </div>
 
       </div>

@@ -6,11 +6,16 @@ import { useSales } from '../context/SalesContext';
 export const FloatingWhatsApp: React.FC = () => {
   const { activeSales } = useSales();
 
+  const salesDisplayName = activeSales.name ? activeSales.name.split('(')[0].trim() : 'Sales Resmi';
+  const waMessage = [
+    `Halo Kak ${salesDisplayName} (Sales Resmi IndiHome),`,
+    `Saya tertarik untuk pasang WiFi IndiHome. Apakah boleh saya tanya lebih lanjut?`,
+  ].join('\n');
+
   const waUrl = getWhatsAppUrl({
     salesPhoneNumber: activeSales.phone,
     salesName: activeSales.name,
-    intent: 'general',
-    customNote: `Halo Kak ${activeSales.name}, saya mau tanya paket WiFi dan cek coverage di daerah saya.`,
+    customMessage: waMessage,
   });
 
   return (

@@ -8,7 +8,7 @@ if (fs.existsSync(indexPath)) {
   const htmlContent = fs.readFileSync(indexPath, "utf-8");
 
   // Directories to duplicate index.html into for pure static hostings
-  const routes = ["admin", "paket", "cek-area", "keunggulan", "cara-pasang", "testimoni", "faq"];
+  const routes = ["admin", "paket", "cek-area", "keunggulan", "cara-pasang", "testimoni", "faq", "mindi"];
 
   for (const route of routes) {
     const routeDir = path.join(distDir, route);

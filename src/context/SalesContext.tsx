@@ -7,7 +7,7 @@ import {
   WHATSAPP_CONFIG,
 } from '../config/whatsapp';
 
-const STORAGE_KEY = 'indihome_sales_agents_v1';
+const STORAGE_KEY = 'indihome_sales_agents_v2';
 const ACTIVE_SALES_SESSION_KEY = 'indihome_active_sales_slug';
 
 interface SalesContextType {
@@ -65,11 +65,23 @@ export const SalesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // 1. Initialize Sales List from LocalStorage or default
   const [salesList, setSalesList] = useState<SalesAgent[]>(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('indihome_sales_agents_v1');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          // Otomatis ubah default agent 'Rian' menjadi 'Mindi'
+          const migrated = parsed.map((agent: SalesAgent) => {
+            if (agent.name === 'Rian' || agent.slug === 'rian' || agent.id === 'sales-rian') {
+              return {
+                ...agent,
+                id: agent.id === 'sales-rian' ? 'sales-mindi' : agent.id,
+                slug: agent.slug === 'rian' ? 'mindi' : agent.slug,
+                name: 'Mindi',
+              };
+            }
+            return agent;
+          });
+          return migrated;
         }
       }
     } catch {

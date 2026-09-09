@@ -9,6 +9,12 @@ export const Footer: React.FC = () => {
   const { navigateTo } = useAppNavigation();
   const { activeSales } = useSales();
 
+  const salesDisplayName = activeSales.name ? activeSales.name.split('(')[0].trim() : 'Sales Resmi';
+  const footerWaMessage = [
+    `Halo Kak ${salesDisplayName} (Sales Resmi IndiHome),`,
+    `Saya tertarik untuk pasang WiFi IndiHome. Apakah boleh saya tanya lebih lanjut?`,
+  ].join('\n');
+
   const navLinks: { label: string; page: PageId; anchorId?: string }[] = [
     { label: 'Beranda', page: 'home' },
     { label: 'Paket Internet & Telkomsel One', page: 'paket' },
@@ -107,8 +113,7 @@ export const Footer: React.FC = () => {
                 href={getWhatsAppUrl({
                   salesPhoneNumber: activeSales.phone,
                   salesName: activeSales.name,
-                  intent: 'general',
-                  customNote: `Halo Kak ${activeSales.name}, saya butuh info pasang WiFi IndiHome.`,
+                  customMessage: footerWaMessage,
                 })}
                 target="_blank"
                 rel="noopener noreferrer"

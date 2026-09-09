@@ -7,7 +7,7 @@ import { SalesAgent } from '../types';
 export const WHATSAPP_CONFIG = {
   // Default WhatsApp Phone Number (Fallback)
   phoneNumber: '6282116505311',
-  salesRepName: 'Rian (Sales Resmi IndiHome by Telkomsel)',
+  salesRepName: 'Mindi (Sales Resmi IndiHome by Telkomsel)',
   serviceAreas: [
     'Bandung',
     'Cimahi',
@@ -26,9 +26,9 @@ export const WHATSAPP_CONFIG = {
  */
 export const DEFAULT_SALES_AGENTS: SalesAgent[] = [
   {
-    id: 'sales-rian',
-    slug: 'rian',
-    name: 'Rian',
+    id: 'sales-mindi',
+    slug: 'mindi',
+    name: 'Mindi',
     phone: '6282116505311',
     displayPhone: '0821-1650-5311',
     area: 'Bandung, Cimahi, Padalarang & Sekitarnya',
@@ -82,6 +82,7 @@ export interface WhatsAppMessageParams {
   subDistrict?: string;
   address?: string;
   customNote?: string;
+  customMessage?: string;
   customerName?: string;
   primaryPhone?: string;
   backupPhone?: string;
@@ -111,6 +112,7 @@ export function getWhatsAppUrl(params: WhatsAppMessageParams = {}): string {
     primaryPhone,
     backupPhone,
     customerEmail,
+    customMessage,
     salesPhoneNumber,
     salesName,
   } = params;
@@ -118,6 +120,11 @@ export function getWhatsAppUrl(params: WhatsAppMessageParams = {}): string {
   // Tentukan nomor tujuan (sales aktif atau fallback default)
   const targetPhone = normalizePhoneNumber(salesPhoneNumber || WHATSAPP_CONFIG.phoneNumber);
   const targetName = salesName ? salesName.split('(')[0].trim() : 'Sales Resmi';
+
+  // Jika ada customMessage lengkap, langsung gunakan
+  if (customMessage) {
+    return `https://wa.me/${targetPhone}?text=${encodeURIComponent(customMessage)}`;
+  }
 
   let messageLines: string[] = [];
 

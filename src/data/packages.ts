@@ -11,7 +11,7 @@ export const TELKOMSEL_ONE_TIERS: TelkomselOneTier[] = [
     deviceRecommendation: 'Optimal untuk 4 - 6 perangkat di rumah + HP keluarga',
     isBestSeller: true,
     tag: 'Pilihan Paling Cuan (Selisih Cuma 10rb)',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     options: {
       '30 GB': {
         monthlyPrice: 280000,
@@ -26,7 +26,7 @@ export const TELKOMSEL_ONE_TIERS: TelkomselOneTier[] = [
     },
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 150 Mbps selama 3 bulan!',
-      'Bonus Langganan Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Langganan Streaming: MAXstream',
       'Internet Rumah Fiber Optic Unlimited Tanpa Batas Kuota',
       'Termasuk Modem WiFi Dual-Band resmi Telkomsel',
     ],
@@ -41,7 +41,7 @@ export const TELKOMSEL_ONE_TIERS: TelkomselOneTier[] = [
     deviceRecommendation: 'Optimal untuk 6 - 10 perangkat di rumah + HP keluarga',
     isBestSeller: false,
     tag: 'Upspeed 6 Bulan',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     options: {
       '30 GB': {
         monthlyPrice: 310000,
@@ -56,7 +56,7 @@ export const TELKOMSEL_ONE_TIERS: TelkomselOneTier[] = [
     },
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 200 Mbps selama 6 bulan penuh!',
-      'Bonus Langganan Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Langganan Streaming: MAXstream',
       'Internet Fiber Optic berkecepatan tinggi tanpa hambatan',
       'Termasuk Modem WiFi Dual-Band',
     ],
@@ -71,7 +71,7 @@ export const TELKOMSEL_ONE_TIERS: TelkomselOneTier[] = [
     deviceRecommendation: 'Optimal untuk 10 - 15+ perangkat di rumah + HP keluarga',
     isBestSeller: false,
     tag: 'Upspeed 300 Mbps',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     options: {
       '30 GB': {
         monthlyPrice: 340000,
@@ -86,7 +86,7 @@ export const TELKOMSEL_ONE_TIERS: TelkomselOneTier[] = [
     },
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 300 Mbps selama 6 bulan!',
-      'Bonus Langganan Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Langganan Streaming: MAXstream',
       'Koneksi Premium 150-300 Mbps Full Fiber Optic',
       'Modem Dual-Band High-Gain',
     ],
@@ -191,7 +191,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     formattedPrice: 'Rp 280.000',
     priceNote: 'Belum termasuk PPN 11%',
     kuotaKeluarga: '30 GB',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     idealFor: 'Solusi satu tagihan internet rumah fiber + kuota bersama keluarga 30 GB',
     deviceRecommendation: 'Optimal untuk 4 - 6 perangkat di rumah + HP keluarga',
     isBestSeller: false,
@@ -199,7 +199,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 150 Mbps selama 3 bulan!',
       'Kuota Bersama Keluarga 30 GB/bulan untuk nomor Telkomsel',
-      'Bonus Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Streaming: MAXstream',
       'Internet rumah fiber optik stabil tanpa kuota',
       'Termasuk Modem WiFi Dual-Band resmi',
     ],
@@ -218,7 +218,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     formattedPrice: 'Rp 290.000',
     priceNote: 'Belum termasuk PPN 11%',
     kuotaKeluarga: '50 GB',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     idealFor: 'Paling cuan! Selisih cuma 10rb langsung dapet kuota keluarga 50 GB per bulan',
     deviceRecommendation: 'Optimal untuk 4 - 6 perangkat di rumah + HP keluarga',
     isBestSeller: true,
@@ -226,7 +226,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 150 Mbps selama 3 bulan!',
       'Kuota Bersama Keluarga 50 GB/bulan (Hanya beda 10rb dari 30GB!)',
-      'Bonus Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Streaming: MAXstream',
       'Internet rumah fiber optik stabil tanpa kuota',
       'Termasuk Modem WiFi Dual-Band resmi',
     ],
@@ -245,7 +245,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     formattedPrice: 'Rp 310.000',
     priceNote: 'Belum termasuk PPN 11%',
     kuotaKeluarga: '30 GB',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     idealFor: 'Internet cepat 100 Mbps + kuota keluarga 30 GB untuk mobilitas luar rumah',
     deviceRecommendation: 'Optimal untuk 6 - 10 perangkat',
     isBestSeller: false,
@@ -253,7 +253,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 200 Mbps selama 6 bulan penuh!',
       'Kuota Bersama Keluarga 30 GB/bulan',
-      'Bonus Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Streaming: MAXstream',
       'Internet Fiber Optic berkecepatan tinggi',
       'Termasuk Modem WiFi Dual-Band',
     ],
@@ -272,7 +272,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     formattedPrice: 'Rp 320.000',
     priceNote: 'Belum termasuk PPN 11%',
     kuotaKeluarga: '50 GB',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     idealFor: 'Kecepatan 100 ke 200 Mbps (6 bln) + Kuota 50 GB. Pilihan cerdas keluarga aktif!',
     deviceRecommendation: 'Optimal untuk 6 - 10 perangkat',
     isBestSeller: false,
@@ -280,7 +280,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 200 Mbps selama 6 bulan penuh!',
       'Kuota Bersama Keluarga 50 GB/bulan (Cuma beda 10rb dari 30GB)',
-      'Bonus Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Streaming: MAXstream',
       'Internet Fiber Optic berkecepatan tinggi',
       'Termasuk Modem WiFi Dual-Band',
     ],
@@ -299,7 +299,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     formattedPrice: 'Rp 340.000',
     priceNote: 'Belum termasuk PPN 11%',
     kuotaKeluarga: '30 GB',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     idealFor: 'Super cepat 150 Mbps upspeed 300 Mbps selama 6 bulan + Kuota 30 GB',
     deviceRecommendation: 'Optimal untuk 10 - 15 perangkat',
     isBestSeller: false,
@@ -307,7 +307,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 300 Mbps selama 6 bulan!',
       'Kuota Bersama Keluarga 30 GB/bulan',
-      'Bonus Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Streaming: MAXstream',
       'Koneksi Premium 150-300 Mbps Full Fiber',
       'Modem Dual-Band High-Gain',
     ],
@@ -326,7 +326,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     formattedPrice: 'Rp 350.000',
     priceNote: 'Belum termasuk PPN 11%',
     kuotaKeluarga: '50 GB',
-    includedApps: ['Vision+', 'Prime Video', 'Viu', 'MaxStream'],
+    includedApps: ['MaxStream'],
     idealFor: 'Puncak kecepatan 300 Mbps + Kuota 50 GB. Hanya beda 10rb untuk ekstra 20 GB!',
     deviceRecommendation: 'Optimal untuk 10 - 15 perangkat',
     isBestSeller: false,
@@ -334,7 +334,7 @@ export const PACKAGES_DATA: PackageItem[] = [
     perks: [
       'Upspeed Promo: Kecepatan lonjak ke 300 Mbps selama 6 bulan!',
       'Kuota Bersama Keluarga 50 GB/bulan (Sangat hemat, hanya beda 10rb)',
-      'Bonus Streaming: Vision+, Prime Video, Viu, & MaxStream',
+      'Bonus Streaming: MAXstream',
       'Koneksi Premium 150-300 Mbps Full Fiber',
       'Modem Dual-Band High-Gain',
     ],

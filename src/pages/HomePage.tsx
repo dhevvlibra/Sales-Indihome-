@@ -15,9 +15,17 @@ import {
   Radio,
 } from 'lucide-react';
 import { WHATSAPP_CONFIG, getWhatsAppUrl } from '../config/whatsapp';
+import { useSales } from '../context/SalesContext';
 
 export const HomePage: React.FC = () => {
   const { navigateTo } = useAppNavigation();
+  const { activeSales } = useSales();
+
+  const salesDisplayName = activeSales.name ? activeSales.name.split('(')[0].trim() : 'Sales Resmi';
+  const directWaMessage = [
+    `Halo Kak ${salesDisplayName} (Sales Resmi IndiHome),`,
+    `Saya tertarik untuk pasang WiFi IndiHome. Apakah boleh saya tanya lebih lanjut?`,
+  ].join('\n');
 
   const exploreLinks = [
     {
@@ -87,23 +95,20 @@ export const HomePage: React.FC = () => {
       {/* 1. Hero Section with SaaS Split Layout */}
       <Hero />
 
-      {/* 2. Packages Pricing & Selection */}
-      <Packages />
-
-      {/* 3. Compact Coverage Action Strip (Clean & Mobile-Friendly) */}
-      <section className="py-6 sm:py-8 bg-slate-100 border-t border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <div className="w-10 h-10 rounded-xl bg-red-50 text-[#E0040B] flex items-center justify-center shrink-0">
+      {/* 2. Cek Jangkauan Area (Clean & Mobile-Friendly Action Banner) */}
+      <section className="py-6 sm:py-8 bg-white border-b border-slate-200/80">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="bg-gradient-to-r from-red-50/40 via-white to-slate-50/80 rounded-2xl p-4 sm:p-5 border border-red-100/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-center gap-3.5 w-full sm:w-auto">
+              <div className="w-11 h-11 rounded-xl bg-red-100/70 text-[#E0040B] flex items-center justify-center shrink-0">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
-                  Cek Jangkauan WiFi di Lokasi Anda
+                <h3 className="text-sm sm:text-base font-bold text-slate-950 leading-tight">
+                  Cek Jangkauan WiFi di Alamat Anda
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Tersedia untuk Bandung, Cimahi, dan 6 wilayah lainnya
+                  Tersedia untuk Bandung, Cimahi, Padalarang, Cianjur, Lembang, Cisarua, Sukabumi &amp; Soreang
                 </p>
               </div>
             </div>
@@ -111,30 +116,34 @@ export const HomePage: React.FC = () => {
             <button
               id="btn-goto-coverage-page"
               onClick={() => navigateTo('cek-area')}
-              className="w-full sm:w-auto bg-[#E0040B] hover:bg-[#b90006] text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0"
+              className="w-full sm:w-auto bg-[#E0040B] hover:bg-[#b90006] text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0"
             >
               <MapPin className="w-4 h-4" />
-              <span>Cek Area</span>
+              <span>Cek Area Sekarang</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
       </section>
 
+      {/* 3. Packages Pricing & Selection */}
+      <Packages />
+
       {/* 4. Multi-Page Hub Teaser: Explore dedicated pages */}
-      <section className="py-16 md:py-20 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 md:py-24 bg-slate-50/60 border-b border-slate-200/80 relative">
+        <div className="absolute inset-0 bg-fiber-pattern pointer-events-none opacity-40" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 text-[#E0040B] rounded-full text-[10px] font-bold uppercase mb-3 border border-red-100">
-              <ShieldCheck className="w-3 h-3" />
-              Informasi Lengkap Layanan
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-white border border-slate-200 rounded-full text-xs font-semibold text-slate-700 mb-3 shadow-2xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#E0040B]" />
+              <span>Panduan &amp; Informasi Pemasangan</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight">
               Ketahui Lebih Lanjut Sebelum Memasang
             </h2>
-            <p className="mt-2 text-sm text-slate-500">
-              Pilih halaman yang ingin Anda baca untuk memahami alur pendaftaran, jaminan resmi, dan ulasan pelanggan.
+            <p className="mt-2.5 text-sm text-slate-600 leading-relaxed">
+              Pelajari alur pendaftaran, jaminan resmi dari Telkomsel, serta ulasan pelanggan asli di Bandung Raya &amp; sekitarnya.
             </p>
           </div>
 
@@ -145,18 +154,18 @@ export const HomePage: React.FC = () => {
                 <button
                   key={item.page}
                   onClick={() => navigateTo(item.page)}
-                  className="group text-left p-6 rounded-3xl bg-slate-50/70 hover:bg-white border border-slate-200 hover:border-slate-300 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
+                  className="group text-left p-6 rounded-2xl bg-white hover:bg-white border border-slate-200 hover:border-red-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between cursor-pointer"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div className={`w-10 h-10 rounded-xl ${item.bg} ${item.color} flex items-center justify-center font-bold`}>
                         <IconComp className="w-5 h-5" />
                       </div>
-                      <span className="text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded-full border border-slate-200">
+                      <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200/60">
                         {item.badge}
                       </span>
                     </div>
-                    <h3 className="text-base font-bold text-slate-900 mb-2 group-hover:text-[#E0040B] transition-colors">
+                    <h3 className="text-base font-bold text-slate-950 mb-2 group-hover:text-[#E0040B] transition-colors">
                       {item.title}
                     </h3>
                     <p className="text-xs text-slate-500 leading-relaxed mb-4">
@@ -164,8 +173,8 @@ export const HomePage: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs font-bold text-[#E0040B]">
-                    <span>Buka Halaman</span>
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#E0040B]">
+                    <span>Buka Informasi</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </button>
@@ -174,24 +183,28 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Quick Direct Registration Banner */}
-          <div className="mt-10 p-6 sm:p-8 rounded-3xl bg-[#0F172A] text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-            <div className="space-y-1 text-center sm:text-left">
-              <div className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 mb-1">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                Sales Online Siap Membantu Hari Ini
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-slate-800">
+            <div className="space-y-1.5 text-center sm:text-left">
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 mb-1">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Sales Resmi Siap Membantu</span>
               </div>
               <h3 className="text-lg sm:text-xl font-black text-white">
                 Mau Pasang Hari Ini? Tanya Slot ODP Sekarang
               </h3>
-              <p className="text-xs text-slate-400 max-w-xl">
-                Dapatkan layanan pemasangan resmi cepat dan modem WiFi canggih untuk area Bandung, Cimahi, Padalarang, Cianjur, Lembang, Cisarua, Sukabumi, dan Soreang.
+              <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
+                Dapatkan layanan pemasangan resmi cepat dan modem WiFi dual-band untuk area Bandung, Cimahi, Padalarang, Cianjur, Lembang, Cisarua, Sukabumi, dan Soreang.
               </p>
             </div>
             <a
-              href={getWhatsAppUrl({ intent: 'general' })}
+              href={getWhatsAppUrl({
+                salesPhoneNumber: activeSales.phone,
+                salesName: activeSales.name,
+                customMessage: directWaMessage,
+              })}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95 shrink-0"
+              className="bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-600/20 active:scale-98 shrink-0"
             >
               Chat Sales via WhatsApp
             </a>

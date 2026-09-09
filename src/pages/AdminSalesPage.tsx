@@ -393,7 +393,7 @@ export const AdminSalesPage: React.FC = () => {
             <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
               <span className="text-xs text-slate-400 block font-medium">Sales Default Kantor</span>
               <span className="text-base sm:text-lg font-black text-emerald-400 mt-1 block truncate">
-                {salesList.find((s) => s.isDefault)?.name || 'Rian'}
+                {salesList.find((s) => s.isDefault)?.name || 'Mindi'}
               </span>
             </div>
             <div className="col-span-2 sm:col-span-1 bg-white/5 rounded-2xl p-4 border border-white/10 flex items-center justify-between">
